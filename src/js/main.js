@@ -10,18 +10,17 @@ function checkEmail () {
   return true
 }
 
-function getItems () {
+async function getItems () {
 
   let url = document.getElementById('btn-page').getAttribute('page')
-  fetch(url)
-      .then(response => response.json())
-      .then(response => {
-          buildCarditems(response.products[0])
-          document.querySelector('body section .btn-page').setAttribute('page', 'https://' + response.nextPage)
-      })
-      .catch(erro => {
-          console.error(erro)
-      })
+  try {
+    const response = await fetch(url)
+    const { products, nextPage } = response.json()
+    buildCarditems(products)
+    document.querySelector('body section .btn-page').setAttribute('page', 'https://' + nextPage)
+  } catch (error) {
+    console.error(error)
+  }
 }
 
 function buildCarditems (products) {
